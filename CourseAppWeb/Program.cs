@@ -1,7 +1,17 @@
+using CourseAppWeb.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var serverVersion = new MySqlServerVersion(new Version(builder.Configuration["MySqlServer:Version"]));
+
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(
+    builder.Configuration.GetConnectionString("DefaultConnection"), serverVersion));
+
+//builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
